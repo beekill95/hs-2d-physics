@@ -62,7 +62,14 @@ library
     exposed-modules:  MyLib
 
     -- Modules included in this library but not exported.
-    -- other-modules:
+    other-modules:
+        Ball,
+        BallWorld,
+        Boundary,
+        Renderer,
+        SolidObject,
+        Solver,
+        Vec
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
@@ -95,6 +102,7 @@ executable hs-2d-physics
     -- Other library packages from which modules are imported.
     build-depends:
         base ^>=4.17.1.0,
+        gloss ^>=1.13,
         hs-2d-physics
 
     -- Directories containing source files.
