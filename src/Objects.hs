@@ -4,13 +4,20 @@ import Vec
 
 class SolidObject a where
   position :: a -> Vec
-  updatePosition :: a -> Vec -> a
+  updatePosition :: Vec -> a -> a
+
+  velocity :: a -> Vec
+  updateVelocity :: Vec -> a -> a
 
 data Ball = Ball
   { center :: Vec,
-    radius :: Float
+    radius :: Float,
+    vel :: Vec
   }
 
 instance SolidObject Ball where
   position = center
-  updatePosition ball pos = ball {center = pos}
+  updatePosition pos ball = ball {center = pos}
+
+  velocity = vel
+  updateVelocity v ball = ball {vel = v}
