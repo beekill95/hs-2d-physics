@@ -1,25 +1,24 @@
 module MyLib where
 
-import Ball
+import Ball2
 import BallWorld
 import qualified Graphics.Gloss as G
 import Linear.V2
 import Renderer
-import Solver
+import World
 
 initialWorld :: BallWorld
 initialWorld =
   BallWorld
     { balls =
-        [ Ball
+        [ Ball2
             { center = V2 0 0,
               radius = 10,
-              vel = V2 0 0,
-              color = G.blue
+              velocity = V2 0 0,
+              acceleration = V2 0 (-50)
             }
         ],
-      boundary = 0,
-      g = V2 0 (-50)
+      boundary = 0
     }
 
 renderBallWorld :: BallWorld -> G.Picture

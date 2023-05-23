@@ -8,7 +8,7 @@ main = simulate window background fps initialWorld renderBallWorld update
   where
     -- Window's width, height, and offset.
     width, height, offset :: Int
-    width = 800
+    width = 500
     height = 500
     offset = 200
 

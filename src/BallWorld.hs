@@ -1,24 +1,20 @@
 module BallWorld where
 
-import Ball
+import Ball2
 import Graphics.Gloss
 import Renderer
-import Solver
-import Vec
+import VerletObject
+import World
 
 data BallWorld = BallWorld
-  { balls :: [Ball],
-    boundary :: Int,
-    g :: Vec
+  { balls :: [Ball2],
+    boundary :: Int
   }
 
-instance VerletWorld BallWorld where
-  gravity = g
+instance World BallWorld where
   updateWorld t w = w {balls = objs}
     where
-      objs = map (accelerate t w) $ balls w
+      objs = map (move t) $ balls w
 
 instance Renderable BallWorld where
-  render w = Pictures $ map render objs
-    where
-      objs = balls w
+  render = Pictures . map render . balls
