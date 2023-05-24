@@ -1,3 +1,5 @@
+{-# LANGUAGE MultiParamTypeClasses #-}
+
 module Object where
 
 import Linear.Metric
@@ -16,22 +18,19 @@ class (Object a) => Movable a where
   updateVelocity :: Vec2 -> a -> a
   updateAcceleration :: Vec2 -> a -> a
 
-class (Movable a) => RigidCircular a where
-  radius_ :: a -> Float
-
+class (Movable a) => RigidShape a where
   isCollided :: a -> a -> Bool
-  isCollided o1 o2 = d <= (r1 + r2)
-    where
-      d = distance (position_ o1) (position_ o2)
-      r1 = radius_ o1
-      r2 = radius_ o2
-
   solveCollision :: a -> a -> (a, a)
-  solveCollision o1 o2 = _
-    where
-      p1 = position_ o1
-      p2 = position_ o2
 
-      d = distance p1 p2
-      r1 = radius_ o1
-      r2 = radius_ o2
+class (RigidShape a, RigidShape b) => RigidShapePair a b where
+  isCollidedPair :: a -> b -> Bool
+  isCollidedPair a b = isCollidedPair' b a
+
+  solveCollisionPair :: a -> b -> (a, b)
+  solveCollisionPair a b = solveCollisionPair' b a
+
+  isCollidedPair' :: b -> a -> Bool
+  isCollidedPair' b a = isCollidedPair a b
+
+  solveCollisionPair' :: b -> a -> (a, b)
+  solveCollisionPair' b a = solveCollisionPair a b
