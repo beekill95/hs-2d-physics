@@ -18,19 +18,6 @@ class (Object a) => Movable a where
   updateVelocity :: Vec2 -> a -> a
   updateAcceleration :: Vec2 -> a -> a
 
-class (Movable a) => RigidShape a where
-  isCollided :: a -> a -> Bool
-  solveCollision :: a -> a -> (a, a)
-
-class (RigidShape a, RigidShape b) => RigidShapePair a b where
-  isCollidedPair :: a -> b -> Bool
-  isCollidedPair a b = isCollidedPair' b a
-
-  solveCollisionPair :: a -> b -> (a, b)
-  solveCollisionPair a b = solveCollisionPair' b a
-
-  isCollidedPair' :: b -> a -> Bool
-  isCollidedPair' b a = isCollidedPair a b
-
-  solveCollisionPair' :: b -> a -> (a, b)
-  solveCollisionPair' b a = solveCollisionPair a b
+class (Object a, Object b) => RigidShape a b where
+  isCollided :: a -> b -> Bool
+  solveCollision :: a -> b -> (a, b)

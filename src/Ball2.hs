@@ -1,3 +1,5 @@
+{-# LANGUAGE MultiParamTypeClasses #-}
+
 module Ball2 where
 
 import Graphics.Gloss
@@ -12,6 +14,11 @@ data Ball2 = Ball2
     velocity :: Vec2,
     acceleration :: Vec2
   }
+
+data Rectangle2 = R {a :: Float, b :: Float}
+
+instance Object Rectangle2 where
+  position_ = undefined
 
 instance Object Ball2 where
   position_ = center
@@ -28,3 +35,12 @@ instance VerletObject Ball2
 
 instance Renderable Ball2 where
   render (Ball2 {center = (V2 x y), radius = r}) = translate x y $ circleSolid r
+
+-- instance RigidShape Ball2 Ball2 where
+--   isCollided _ _ = True
+
+-- instance RigidShape Ball2 Rectangle2 where
+--   isCollided _ _ = True
+
+-- instance RigidShape Rectangle2 Ball2 where
+--   isCollided = flip isCollided
