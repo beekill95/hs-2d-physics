@@ -1,7 +1,10 @@
+{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE UndecidableInstances #-}
 
 module Object where
 
+import Data.Tuple
 import Linear.Metric
 import Linear.V2
 
@@ -21,3 +24,7 @@ class (Object a) => Movable a where
 class (Object a, Object b) => RigidShape a b where
   isCollided :: a -> b -> Bool
   solveCollision :: a -> b -> (a, b)
+
+instance (Object a, Object b, RigidShape a b) => RigidShape b a where
+  isCollided = flip isCollided
+  solveCollision a b = swap $ solveCollision b a
