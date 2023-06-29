@@ -3,7 +3,7 @@
 module Ball where
 
 import Graphics.Gloss
-import Linear.V2
+import Linear (Metric (distance, signorm), V2 (V2))
 import Object
 import Renderer
 import VerletObject
@@ -31,11 +31,20 @@ instance VerletObject Ball
 instance Renderable Ball where
   render (Ball {center = (V2 x y), radius = r}) = translate x y $ circleSolid r
 
--- instance RigidShape Ball2 Ball2 where
---   isCollided _ _ = True
+instance RigidShape Ball Ball where
+  isCollided x y = d < (radius x + radius y)
+    where
+      d = distance (center x) (center y)
 
--- instance RigidShape Ball2 Rectangle2 where
---   isCollided _ _ = True
+  -- Naive collision solver.
+  solveCollision b1@(Ball {center = c1, radius = r1}) b2@(Ball {center = c2, radius = r2})
+    | isCollided b1 b2 =
+        ( b1 {center = c1 - unitDir * pure halfIntersection},
+          b2 {center = c2 + unitDir * pure halfIntersection}
+        )
+    | otherwise = (b1, b2)
+    where
+      d = distance c1 c2
+      halfIntersection = (r1 + r2 - d) / 2
 
--- instance RigidShape Rectangle2 Ball2 where
---   isCollided = flip isCollided
+      unitDir = signorm (c2 - c1)
