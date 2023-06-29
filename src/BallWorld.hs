@@ -1,6 +1,7 @@
 module BallWorld where
 
 import Ball
+import Container
 import Graphics.Gloss
 import Renderer
 import VerletObject
@@ -8,7 +9,7 @@ import World
 
 data BallWorld = BallWorld
   { balls :: [Ball],
-    boundary :: Int
+    container :: Container
   }
 
 instance World BallWorld where
@@ -17,4 +18,6 @@ instance World BallWorld where
       objs = map (move t) $ balls w
 
 instance Renderable BallWorld where
-  render = Pictures . map render . balls
+  render w = Pictures p
+    where
+      p = render (container w) : map render (balls w)

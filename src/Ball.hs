@@ -2,7 +2,7 @@
 
 module Ball where
 
-import Graphics.Gloss
+import qualified Graphics.Gloss as G
 import Linear (Metric (distance, signorm), V2 (V2))
 import Object
 import Renderer
@@ -12,7 +12,8 @@ data Ball = Ball
   { center :: Vec2,
     radius :: Float,
     velocity :: Vec2,
-    acceleration :: Vec2
+    acceleration :: Vec2,
+    color :: G.Color
   }
 
 instance Object Ball where
@@ -29,7 +30,7 @@ instance Movable Ball where
 instance VerletObject Ball
 
 instance Renderable Ball where
-  render (Ball {center = (V2 x y), radius = r}) = translate x y $ circleSolid r
+  render (Ball {center = (V2 x y), radius = r, color = c}) = G.color c $ G.translate x y $ G.circleSolid r
 
 instance RigidShape Ball Ball where
   isCollided x y = d < (radius x + radius y)

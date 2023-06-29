@@ -20,7 +20,7 @@ main = simulate window background fps initialWorld renderBallWorld update
     window = InWindow "Ball World" (width, height) (offset, offset)
 
     -- Window's background color.
-    background = white
+    background = black
 
     -- Update world.
     update _ = updateBallWorld
