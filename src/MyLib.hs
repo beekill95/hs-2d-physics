@@ -1,6 +1,6 @@
 module MyLib where
 
-import Ball2
+import Ball
 import BallWorld
 import qualified Graphics.Gloss as G
 import Linear.V2
@@ -11,7 +11,7 @@ initialWorld :: BallWorld
 initialWorld =
   BallWorld
     { balls =
-        [ Ball2
+        [ Ball
             { center = V2 0 0,
               radius = 10,
               velocity = V2 0 0,

@@ -5,7 +5,6 @@
 module Object where
 
 import Data.Tuple
-import Linear.Metric
 import Linear.V2
 
 type Vec2 = V2 Float

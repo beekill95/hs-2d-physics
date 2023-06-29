@@ -1,13 +1,13 @@
 module BallWorld where
 
-import Ball2
+import Ball
 import Graphics.Gloss
 import Renderer
 import VerletObject
 import World
 
 data BallWorld = BallWorld
-  { balls :: [Ball2],
+  { balls :: [Ball],
     boundary :: Int
   }
 
