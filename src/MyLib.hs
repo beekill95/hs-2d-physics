@@ -13,7 +13,28 @@ initialWorld =
   BallWorld
     { balls =
         [ B.Ball
-            { B.center = V2 0 0,
+            { B.center = V2 200 0,
+              B.radius = 10,
+              B.velocity = V2 0 0,
+              B.acceleration = V2 0 (-50),
+              B.color = G.white
+            },
+          B.Ball
+            { B.center = V2 (-200) 0,
+              B.radius = 10,
+              B.velocity = V2 0 0,
+              B.acceleration = V2 0 (-50),
+              B.color = G.white
+            },
+          B.Ball
+            { B.center = V2 (-125) 200,
+              B.radius = 10,
+              B.velocity = V2 0 0,
+              B.acceleration = V2 0 (-50),
+              B.color = G.white
+            },
+          B.Ball
+            { B.center = V2 125 200,
               B.radius = 10,
               B.velocity = V2 0 0,
               B.acceleration = V2 0 (-50),

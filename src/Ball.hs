@@ -2,6 +2,7 @@
 
 module Ball where
 
+import qualified Container as C
 import qualified Graphics.Gloss as G
 import Linear (Metric (distance, signorm), V2 (V2))
 import Object
@@ -49,3 +50,21 @@ instance RigidShape Ball Ball where
       halfIntersection = (r1 + r2 - d) / 2
 
       unitDir = signorm (c2 - c1)
+
+instance C.ContainerBouncer Ball where
+  bounceOff
+    (C.Container {C.radius = rContainer, C.center = cContainer})
+    ball@(Ball {radius = r, center = c}) =
+      if d < (rContainer - r)
+        then -- The ball is still in the container.
+          ball
+        else -- The ball touches or is outside the boundary of the container.
+          ball {center = newPos}
+      where
+        d = distance cContainer c
+
+        -- Calculate the direction from the ball to center of the container.
+        unitDir = signorm (cContainer - c)
+
+        -- Move the ball inside the boundary.
+        newPos = c + unitDir * pure (d + r - rContainer)

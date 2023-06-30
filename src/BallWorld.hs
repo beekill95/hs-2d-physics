@@ -15,7 +15,10 @@ data BallWorld = BallWorld
 instance World BallWorld where
   updateWorld t w = w {balls = objs}
     where
-      objs = map (move t) $ balls w
+      moveBalls world = map (move t) (balls world)
+      bounceOffContainer = map $ bounceOff $ container w
+
+      objs = bounceOffContainer $ moveBalls w
 
 instance Renderable BallWorld where
   render w = Pictures p
