@@ -7,12 +7,14 @@ import Object
 import Renderer
 import VerletObject
 
+type Color = (Float, Float, Float, Float)
+
 data Ball = Ball
   { center :: Vec2,
     radius :: Float,
     velocity :: Vec2,
     acceleration :: Vec2,
-    color :: G.Color,
+    color :: Color,
     previousCenter :: Maybe Vec2
   }
 
@@ -32,7 +34,15 @@ instance VerletObject Ball where
   updatePreviousPosition x b = b {previousCenter = Just x}
 
 instance Renderable Ball where
-  render (Ball {center = (V2 x y), radius = r, color = c}) = G.color c $ G.translate x y $ G.circleSolid r
+  render
+    ( Ball
+        { center = (V2 x y),
+          radius = rad,
+          color = (r, g, b, a)
+        }
+      ) = G.color c $ G.translate x y $ G.circleSolid rad
+      where
+        c = G.makeColor r g b a
 
 instance RigidObject Ball where
   isCollided x y = d < (radius x + radius y)
@@ -40,17 +50,23 @@ instance RigidObject Ball where
       d = distance (center x) (center y)
 
   -- Naive collision solver.
-  solveCollision b1@(Ball {center = c1, radius = r1}) b2@(Ball {center = c2, radius = r2})
-    | isCollided b1 b2 =
-        ( b1 {center = c1 - unitDir * pure halfIntersection},
-          b2 {center = c2 + unitDir * pure halfIntersection}
-        )
-    | otherwise = (b1, b2)
-    where
-      d = distance c1 c2
-      halfIntersection = (r1 + r2 - d) / 2
+  solveCollision
+    b1@( Ball
+           { center = c1,
+             radius = r1
+           }
+         )
+    b2@(Ball {center = c2, radius = r2})
+      | isCollided b1 b2 =
+          ( b1 {center = c1 - unitDir * pure halfIntersection},
+            b2 {center = c2 + unitDir * pure halfIntersection}
+          )
+      | otherwise = (b1, b2)
+      where
+        d = distance c1 c2
+        halfIntersection = (r1 + r2 - d) / 2
 
-      unitDir = signorm (c2 - c1)
+        unitDir = signorm (c2 - c1)
 
 instance C.ContainerBouncer Ball where
   bounceOff

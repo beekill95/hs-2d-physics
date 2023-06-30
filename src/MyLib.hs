@@ -17,7 +17,7 @@ initialWorld =
               B.radius = 10,
               B.velocity = V2 0 0,
               B.acceleration = V2 0 (-50),
-              B.color = G.white,
+              B.color = (1, 1, 1, 1),
               B.previousCenter = Nothing
             },
           B.Ball
@@ -25,7 +25,7 @@ initialWorld =
               B.radius = 10,
               B.velocity = V2 0 0,
               B.acceleration = V2 0 (-50),
-              B.color = G.white,
+              B.color = (1, 1, 1, 1),
               B.previousCenter = Nothing
             },
           B.Ball
@@ -33,7 +33,7 @@ initialWorld =
               B.radius = 10,
               B.velocity = V2 0 0,
               B.acceleration = V2 0 (-50),
-              B.color = G.white,
+              B.color = (1, 1, 1, 1),
               B.previousCenter = Nothing
             },
           B.Ball
@@ -41,7 +41,7 @@ initialWorld =
               B.radius = 10,
               B.velocity = V2 0 0,
               B.acceleration = V2 0 (-50),
-              B.color = G.white,
+              B.color = (1, 1, 1, 1),
               B.previousCenter = Nothing
             }
         ],
@@ -49,7 +49,7 @@ initialWorld =
         C.Container
           { C.center = V2 0 0,
             C.radius = 250,
-            C.color = G.black
+            C.color = (0, 0, 0, 1)
           }
     }
 
