@@ -65,6 +65,7 @@ library
     other-modules:
         Ball,
         BallWorld,
+        CollisionsSolvers,
         Container,
         Object,
         Renderer,
