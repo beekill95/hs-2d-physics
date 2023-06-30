@@ -1,4 +1,5 @@
-cabal-version:      3.0
+cabal-version:   3.0
+
 -- The cabal-version field refers to the version of the .cabal specification,
 -- and can be different from the cabal-install (the tool) version and the
 -- Cabal (the library) version you are using. As such, the Cabal (the library)
@@ -11,7 +12,7 @@ cabal-version:      3.0
 --   http://haskell.org/cabal/users-guide/
 --
 -- The name of the package.
-name:               hs-2d-physics
+name:            hs-2d-physics
 
 -- The package version.
 -- See the Haskell package versioning policy (PVP) for standards
@@ -20,33 +21,33 @@ name:               hs-2d-physics
 -- PVP summary:     +-+------- breaking API changes
 --                  | | +----- non-breaking API additions
 --                  | | | +--- code changes with no API change
-version:            0.1.0.0
+version:         0.1.0.0
 
 -- A short (one-line) description of the package.
-synopsis:           2D Physics Simulations using Verlet integration.
+synopsis:        2D Physics Simulations using Verlet integration.
 
 -- A longer description of the package.
 -- description:
 
 -- The license under which the package is released.
-license:            MIT
+license:         MIT
 
 -- The file containing the license text.
-license-file:       LICENSE
+license-file:    LICENSE
 
 -- The package author(s).
-author:             beekill
+author:          beekill
 
 -- An email address to which users can send suggestions, bug reports, and patches.
-maintainer:         nguyenmbquan95@gmail.com
+maintainer:      nguyenmbquan95@gmail.com
 
 -- A copyright notice.
 -- copyright:
-category:           Physics Simulation
-build-type:         Simple
+category:        Physics Simulation
+build-type:      Simple
 
 -- Extra doc files to be distributed with the package, such as a CHANGELOG or a README.
-extra-doc-files:    CHANGELOG.md
+extra-doc-files: CHANGELOG.md
 
 -- Extra source files to be distributed with the package, such as examples, or a tutorial module.
 -- extra-source-files:
@@ -63,13 +64,13 @@ library
 
     -- Modules included in this library but not exported.
     other-modules:
-        Ball,
-        BallWorld,
-        CollisionsSolvers,
-        Container,
-        Object,
-        Renderer,
-        VerletObject,
+        Ball
+        BallWorld
+        CollisionsSolvers
+        Container
+        Object
+        Renderer
+        VerletObject
         World
 
     -- LANGUAGE extensions used by modules in this package.
@@ -77,9 +78,9 @@ library
 
     -- Other library packages from which modules are imported.
     build-depends:
-        base ^>=4.17.1.0,
-        linear ^>=1.22,
-        gloss ^>=1.13
+        , base    ^>=4.17.1.0
+        , gloss   ^>=1.13
+        , linear  ^>=1.22
 
     -- Directories containing source files.
     hs-source-dirs:   src
@@ -102,9 +103,9 @@ executable hs-2d-physics
 
     -- Other library packages from which modules are imported.
     build-depends:
-        base ^>=4.17.1.0,
-        gloss ^>=1.13,
-        hs-2d-physics
+        , base           ^>=4.17.1.0
+        , gloss          ^>=1.13
+        , hs-2d-physics
 
     -- Directories containing source files.
     hs-source-dirs:   app
@@ -136,5 +137,5 @@ test-suite hs-2d-physics-test
 
     -- Test dependencies.
     build-depends:
-        base ^>=4.17.1.0,
-        hs-2d-physics
+        , base           ^>=4.17.1.0
+        , hs-2d-physics
