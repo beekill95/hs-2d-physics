@@ -12,7 +12,8 @@ data Ball = Ball
     radius :: Float,
     velocity :: Vec2,
     acceleration :: Vec2,
-    color :: G.Color
+    color :: G.Color,
+    previousCenter :: Maybe Vec2
   }
 
 instance Object Ball where
@@ -26,7 +27,9 @@ instance Movable Ball where
   updateVelocity v o = o {velocity = v}
   updateAcceleration a o = o {acceleration = a}
 
-instance VerletObject Ball
+instance VerletObject Ball where
+  previousPosition_ (Ball {previousCenter = c}) = c
+  updatePreviousPosition x b = b {previousCenter = Just x}
 
 instance Renderable Ball where
   render (Ball {center = (V2 x y), radius = r, color = c}) = G.color c $ G.translate x y $ G.circleSolid r
