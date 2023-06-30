@@ -1,5 +1,3 @@
-{-# LANGUAGE MultiParamTypeClasses #-}
-
 module Ball where
 
 import qualified Container as C
@@ -33,7 +31,7 @@ instance VerletObject Ball
 instance Renderable Ball where
   render (Ball {center = (V2 x y), radius = r, color = c}) = G.color c $ G.translate x y $ G.circleSolid r
 
-instance RigidShape Ball Ball where
+instance RigidObject Ball where
   isCollided x y = d < (radius x + radius y)
     where
       d = distance (center x) (center y)
