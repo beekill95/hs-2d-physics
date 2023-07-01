@@ -8,8 +8,8 @@ main = simulateIO window background fps initialWorld renderBallWorld update
   where
     -- Window's width, height, and offset.
     width, height, offset :: Int
-    width = 500
-    height = 500
+    width = 1000
+    height = 1000
     offset = 200
 
     -- Frames per second.

@@ -75,7 +75,9 @@ instance C.ContainerBouncer Ball where
         then -- The ball is still in the container.
           ball
         else -- The ball touches or is outside the boundary of the container.
-          ball {center = newPos}
+        -- FIXME: previousCenter is for VerletObject, but we're using it here,
+        -- which seems pretty weird to me!
+          ball {center = newPos, previousCenter = Just c}
       where
         d = distance cContainer c
 
