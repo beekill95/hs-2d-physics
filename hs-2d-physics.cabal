@@ -114,6 +114,31 @@ executable simple_app
     -- Base language which the package is written in.
     default-language: Haskell2010
 
+executable random_app
+    -- Import common warning flags.
+    import:           warnings
+
+    -- .hs or .lhs file containing the Main module.
+    main-is:          Main.hs
+
+    -- Modules included in this executable, other than Main.
+    -- other-modules:
+
+    -- LANGUAGE extensions used by modules in this package.
+    -- other-extensions:
+
+    -- Other library packages from which modules are imported.
+    build-depends:
+        , base           ^>=4.17.1.0
+        , gloss          ^>=1.13
+        , hs-2d-physics
+
+    -- Directories containing source files.
+    hs-source-dirs:   random_app
+
+    -- Base language which the package is written in.
+    default-language: Haskell2010
+
 test-suite hs-2d-physics-test
     -- Import common warning flags.
     import:           warnings
