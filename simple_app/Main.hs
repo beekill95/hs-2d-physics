@@ -1,7 +1,7 @@
 module Main where
 
 import Graphics.Gloss
-import MyLib
+import SimpleAppLib
 
 main :: IO ()
 main = simulate window background fps initialWorld renderBallWorld update

@@ -1,4 +1,4 @@
-module MyLib where
+module SimpleAppLib where
 
 import qualified Ball as B
 import BallWorld

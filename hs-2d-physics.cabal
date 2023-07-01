@@ -60,7 +60,7 @@ library
     import:           warnings
 
     -- Modules exported by the library.
-    exposed-modules:  MyLib
+    exposed-modules:  SimpleAppLib
 
     -- Modules included in this library but not exported.
     other-modules:
@@ -78,9 +78,10 @@ library
 
     -- Other library packages from which modules are imported.
     build-depends:
-        , base    ^>=4.17.1.0
-        , gloss   ^>=1.13
-        , linear  ^>=1.22
+        , base         ^>=4.17.1.0
+        , gloss        ^>=1.13
+        , linear       ^>=1.22
+        , MonadRandom  ^>=0.6
 
     -- Directories containing source files.
     hs-source-dirs:   src
@@ -88,7 +89,7 @@ library
     -- Base language which the package is written in.
     default-language: Haskell2010
 
-executable hs-2d-physics
+executable simple_app
     -- Import common warning flags.
     import:           warnings
 
@@ -108,7 +109,7 @@ executable hs-2d-physics
         , hs-2d-physics
 
     -- Directories containing source files.
-    hs-source-dirs:   app
+    hs-source-dirs:   simple_app
 
     -- Base language which the package is written in.
     default-language: Haskell2010
