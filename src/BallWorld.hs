@@ -2,6 +2,7 @@ module BallWorld where
 
 import Ball
 import CollisionsSolvers (solveCollisionsNaively)
+import qualified Color
 import Container
 import Graphics.Gloss
 import Renderer
@@ -10,7 +11,12 @@ import World
 
 data BallWorld = BallWorld
   { balls :: [Ball],
-    container :: Container
+    container :: Container,
+    -- Current color value that will be assigned to the next ball's color;
+    -- it's only used for RandomAppLib.
+    hsv :: Color.HSV,
+    -- Time since the last ball were added.
+    timeSinceLastBall :: Float
   }
 
 instance World BallWorld where
@@ -18,7 +24,6 @@ instance World BallWorld where
     where
       moveBalls world = map (move t) (balls world)
       bounceOffContainer = map $ bounceOff $ container w
-
       update = solveCollisionsNaively . bounceOffContainer . moveBalls
 
 instance Renderable BallWorld where

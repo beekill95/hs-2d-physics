@@ -69,6 +69,7 @@ library
         Ball
         BallWorld
         CollisionsSolvers
+        Color
         Container
         Object
         Renderer

@@ -1,5 +1,6 @@
 module Ball where
 
+import qualified Color
 import qualified Container as C
 import qualified Graphics.Gloss as G
 import Linear (Metric (distance, signorm), V2 (V2))
@@ -7,14 +8,12 @@ import Object
 import Renderer
 import VerletObject
 
-type Color = (Float, Float, Float, Float)
-
 data Ball = Ball
   { center :: Vec2,
     radius :: Float,
     velocity :: Vec2,
     acceleration :: Vec2,
-    color :: Color,
+    color :: Color.RGBA,
     previousCenter :: Maybe Vec2
   }
 

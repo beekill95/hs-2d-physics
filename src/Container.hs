@@ -1,5 +1,6 @@
 module Container where
 
+import qualified Color
 import qualified Graphics.Gloss as G
 import Linear.V2
 import Object
@@ -7,12 +8,10 @@ import Renderer
 
 -- For simplicity, we will just define a circular container.
 
-type Color = (Float, Float, Float, Float)
-
 data Container = Container
   { center :: V2 Float,
     radius :: Float,
-    color :: Color
+    color :: Color.RGBA
   }
 
 instance Renderable Container where

@@ -50,7 +50,9 @@ initialWorld =
           { C.center = V2 0 0,
             C.radius = 250,
             C.color = (0, 0, 0, 1)
-          }
+          },
+      hsv = (0, 0, 0),
+      timeSinceLastBall = 0
     }
 
 renderBallWorld :: BallWorld -> G.Picture
