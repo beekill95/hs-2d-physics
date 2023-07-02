@@ -55,6 +55,9 @@ extra-doc-files: CHANGELOG.md
 common warnings
     ghc-options: -Wall
 
+common threaded
+    ghc-options: -O2 -threaded
+
 library
     -- Import common warning flags.
     import:           warnings
@@ -85,6 +88,10 @@ library
         , gloss        ^>=1.13
         , linear       ^>=1.22
         , MonadRandom  ^>=0.6
+
+    -- TODO: we might want to switch to SDL2 instead of gloss for performance,
+    -- (still investigating...)
+    --, sdl2         ^>=2.5.5.0
 
     -- Directories containing source files.
     hs-source-dirs:   src
@@ -119,7 +126,7 @@ executable simple_app
 
 executable random_app
     -- Import common warning flags.
-    import:           warnings
+    import:           warnings, threaded
 
     -- .hs or .lhs file containing the Main module.
     main-is:          Main.hs

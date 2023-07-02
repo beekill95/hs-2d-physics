@@ -68,7 +68,7 @@ updateBallWorld t w =
       update w {balls = moreBalls, hsv = nextHSV, timeSinceLastBall = 0}
   where
     -- Time to wait before adding a new ball.
-    wait = 0.25
+    wait = 0.1
 
     -- Time since adding a new ball.
     timeElapsed = timeSinceLastBall w
