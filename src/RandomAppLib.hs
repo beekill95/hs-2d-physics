@@ -26,6 +26,10 @@ initialWorld =
       timeSinceLastBall = 0
     }
 
+-- For showing information about the world.
+nbBalls :: BallWorld -> Int
+nbBalls = length . balls
+
 generateRandomRadius :: (Float, Float) -> IO Float
 generateRandomRadius = randomRIO
 

@@ -135,6 +135,7 @@ executable random_app
         , base           ^>=4.17.1.0
         , gloss          ^>=1.13
         , hs-2d-physics
+        , timeit
 
     -- Directories containing source files.
     hs-source-dirs:   random_app

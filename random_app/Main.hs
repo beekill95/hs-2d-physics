@@ -2,9 +2,10 @@ module Main where
 
 import Graphics.Gloss.Interface.IO.Simulate
 import RandomAppLib
+import System.TimeIt
 
 main :: IO ()
-main = simulateIO window background fps initialWorld renderBallWorld update
+main = simulateIO window background fps initialWorld render update
   where
     -- Window's width, height, and offset.
     width, height, offset :: Int
@@ -23,4 +24,13 @@ main = simulateIO window background fps initialWorld renderBallWorld update
     background = black
 
     -- Update world.
-    update _ = updateBallWorld
+    update _ t w = do
+      (seconds, newWorld) <- timeItT $ updateBallWorld t w
+      putStrLn $ show (nbBalls newWorld) ++ " balls took " ++ show seconds ++ " seconds to update."
+      return newWorld
+
+    -- Measure render time.
+    render w = do
+      (seconds, picture) <- timeItT $ renderBallWorld w
+      putStrLn $ "Rendering took " ++ show seconds ++ " seconds."
+      return picture
