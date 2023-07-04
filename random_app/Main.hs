@@ -1,7 +1,9 @@
 module Main where
 
+-- import Control.DeepSeq
 import Graphics.Gloss.Interface.IO.Simulate
 import RandomAppLib
+-- import System.CPUTime
 import System.TimeIt
 
 main :: IO ()
@@ -25,8 +27,19 @@ main = simulateIO window background fps initialWorld render update
 
     -- Update world.
     update _ t w = do
+      -- start <- getCPUTime
+      -- newWorld <- updateBallWorld t w
+      -- let balls = getBalls newWorld
+      -- end <- balls `deepseq` getCPUTime
+      -- let seconds = fromIntegral (end - start) * (10 ** (-12)) :: Float
       (seconds, newWorld) <- timeItT $ updateBallWorld t w
-      putStrLn $ show (nbBalls newWorld) ++ " balls took " ++ show seconds ++ " seconds to update."
+      putStrLn $
+        show (nbBalls newWorld)
+          ++ " balls took "
+          ++ show seconds
+          ++ " seconds to update, but it should be less than "
+          ++ show t
+          ++ " seconds."
       return newWorld
 
     -- Measure render time.

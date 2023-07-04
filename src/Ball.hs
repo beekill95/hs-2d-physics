@@ -2,6 +2,7 @@ module Ball where
 
 import qualified Color
 import qualified Container as C
+-- import Control.DeepSeq -- FIXME: Remove later, for performance measurement.
 import qualified Graphics.Gloss as G
 import Linear (Metric (distance, signorm), V2 (V2))
 import Object
@@ -16,6 +17,10 @@ data Ball = Ball
     color :: Color.RGBA,
     previousCenter :: Maybe Vec2
   }
+
+-- FIXME: remove later
+-- instance NFData Ball where
+--   rnf a = a `seq` ()
 
 instance Object Ball where
   position_ = center

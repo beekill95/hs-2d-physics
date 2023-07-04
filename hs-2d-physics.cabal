@@ -85,9 +85,11 @@ library
     -- Other library packages from which modules are imported.
     build-depends:
         , base         ^>=4.17.1.0
+        , containers
         , gloss        ^>=1.13
         , linear       ^>=1.22
         , MonadRandom  ^>=0.6
+        , deepseq
 
     -- TODO: we might want to switch to SDL2 instead of gloss for performance,
     -- (still investigating...)
@@ -143,6 +145,7 @@ executable random_app
         , gloss          ^>=1.13
         , hs-2d-physics
         , timeit
+        , deepseq
 
     -- Directories containing source files.
     hs-source-dirs:   random_app

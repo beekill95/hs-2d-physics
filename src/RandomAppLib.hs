@@ -2,7 +2,7 @@ module RandomAppLib where
 
 import qualified Ball as B
 import BallWorld
-import CollisionsSolvers (solveCollisionsNaively)
+import CollisionsSolvers
 import qualified Color (hsv_2_rgba)
 import qualified Container as C
 import Control.Monad.Random
@@ -25,12 +25,15 @@ initialWorld =
           },
       hsv = (0, 0.7, 0.65),
       timeSinceLastBall = 0,
-      collisionsSolver = solveCollisionsNaively
+      collisionsSolver = solveCollisionsGriddedly (-500, 500) (-500, 500) 50
     }
 
 -- For showing information about the world.
 nbBalls :: BallWorld -> Int
 nbBalls = length . balls
+
+getBalls :: BallWorld -> [B.Ball]
+getBalls = balls
 
 generateRandomRadius :: (Float, Float) -> IO Float
 generateRandomRadius = randomRIO
