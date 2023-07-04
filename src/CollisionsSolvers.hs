@@ -1,5 +1,6 @@
 module CollisionsSolvers (solveCollisionsNaively, solveCollisionsGriddedly) where
 
+import Data.Foldable (foldl')
 import qualified Data.Map as M
 import Linear.V2
 import Object
@@ -20,14 +21,17 @@ solveCollisionsNaively (x : xs) = xNew `seq` xNew : solveCollisionsNaively xsNew
 -- Gridded version of collisions solver.
 solveCollisionsGriddedly :: (RigidObject a) => (Int, Int) -> (Int, Int) -> Int -> [a] -> [a]
 solveCollisionsGriddedly _ _ _ [] = []
-solveCollisionsGriddedly w h s objs = (M.foldr (++) [] . cells) solvedGrid
+solveCollisionsGriddedly w h s objs = solvedGrid `seq` (concat . cells) solvedGrid
   where
     solveCollisionsAndAccumulate ::
       (RigidObject a) =>
       (Int, Int, Cell a) ->
       (Cell a, [(Int, Int, Cell a)]) ->
       (Cell a, [(Int, Int, Cell a)])
-    solveCollisionsAndAccumulate (r, c, neighbor) (cell, xs) = (cellSolved, (r, c, neighborSolved) : xs)
+    solveCollisionsAndAccumulate (r, c, neighbor) (cell, xs) =
+      cellSolved `seq`
+        neighborSolved `seq`
+          (cellSolved, (r, c, neighborSolved) : xs)
       where
         (cellSolved, neighborSolved) = solveCollisionsBetweenCells cell neighbor
 
@@ -38,7 +42,7 @@ solveCollisionsGriddedly w h s objs = (M.foldr (++) [] . cells) solvedGrid
       CollisionsGrid a
     solveCollisionsForCell (r, c) g = case getCell r c g of
       Nothing -> g
-      Just cell -> foldr updateCell g updatedCells
+      Just cell -> updatedCells `seq` foldl' (flip updateCell) g updatedCells
         where
           neighboringCells = getNeighboringCells r c g
 
@@ -46,7 +50,7 @@ solveCollisionsGriddedly w h s objs = (M.foldr (++) [] . cells) solvedGrid
           cell1 = solveCollisionsNaively cell
 
           -- Then, solve collisions with neighboring cells.
-          (cell2, neighboringCells2) = foldr solveCollisionsAndAccumulate (cell1, []) neighboringCells
+          (cell2, neighboringCells2) = foldl' (flip solveCollisionsAndAccumulate) (cell1, []) neighboringCells
 
           -- Collect the results.
           updatedCells = (r, c, cell2) : neighboringCells2
@@ -60,7 +64,7 @@ solveCollisionsGriddedly w h s objs = (M.foldr (++) [] . cells) solvedGrid
     (rMin, rMax) = rowRange grid
     (cMin, cMax) = colRange grid
     cellIndices = [(x, y) | x <- [rMin .. (rMax - 1)], y <- [cMin .. (cMax - 1)]]
-    solvedGrid = foldr solveCollisionsForCell grid cellIndices
+    solvedGrid = foldl' (flip solveCollisionsForCell) grid cellIndices
 
 type Cell a = [a]
 
@@ -87,7 +91,7 @@ columns g = cMax - cMin
 constructCollisionsGrid :: (RigidObject a) => (Int, Int) -> (Int, Int) -> Int -> [a] -> CollisionsGrid a
 constructCollisionsGrid (wMin, wMax) (hMin, hMax) s objs =
   CollisionsGrid
-    { cells = foldr (insert . (\o -> (posToCellIdx o, [o]))) M.empty objs,
+    { cells = foldl' (flip (insert . (\o -> (posToCellIdx o, [o])))) M.empty objs,
       rowRange = (rMin, rMax),
       colRange = (cMin, cMax)
       -- width = w,
@@ -117,7 +121,7 @@ getCell :: (RigidObject a) => Int -> Int -> CollisionsGrid a -> Maybe (Cell a)
 getCell r c g = cellIdx r c g >>= (cells g M.!?)
 
 getNeighboringCells :: (RigidObject a) => Int -> Int -> CollisionsGrid a -> [(Int, Int, Cell a)]
-getNeighboringCells r c g = foldr gatherNeighbors [] neighboringIndices
+getNeighboringCells r c g = foldl' (flip gatherNeighbors) [] neighboringIndices
   where
     neighboringIndices =
       [ (r - 1, c - 1),

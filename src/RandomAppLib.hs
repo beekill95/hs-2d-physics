@@ -46,7 +46,7 @@ updateBallWorld t w =
   if timeElapsed < wait
     then update w {timeSinceLastBall = timeElapsed + t}
     else do
-      randomRadius <- generateRandomRadius (5, 20)
+      randomRadius <- generateRandomRadius (5, 10)
 
       let -- Number of different ball colors.
           nbColors = 36
@@ -57,7 +57,7 @@ updateBallWorld t w =
           -- Generate a new ball.
           moreBalls =
             B.Ball
-              { B.center = V2 150 150,
+              { B.center = V2 180 180,
                 B.acceleration = V2 0 (-50),
                 B.velocity = V2 (-400) (-400),
                 B.radius = randomRadius,
@@ -73,7 +73,7 @@ updateBallWorld t w =
       update w {balls = moreBalls, hsv = nextHSV, timeSinceLastBall = 0}
   where
     -- Time to wait before adding a new ball.
-    wait = 0.1
+    wait = 0.05
 
     -- Time since adding a new ball.
     timeElapsed = timeSinceLastBall w
