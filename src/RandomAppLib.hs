@@ -2,6 +2,7 @@ module RandomAppLib where
 
 import qualified Ball as B
 import BallWorld
+import CollisionsSolvers (solveCollisionsNaively)
 import qualified Color (hsv_2_rgba)
 import qualified Container as C
 import Control.Monad.Random
@@ -23,7 +24,8 @@ initialWorld =
             C.color = (0, 0, 0, 1)
           },
       hsv = (0, 0.7, 0.65),
-      timeSinceLastBall = 0
+      timeSinceLastBall = 0,
+      collisionsSolver = solveCollisionsNaively
     }
 
 -- For showing information about the world.

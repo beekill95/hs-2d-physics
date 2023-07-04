@@ -2,6 +2,7 @@ module SimpleAppLib where
 
 import qualified Ball as B
 import BallWorld
+import CollisionsSolvers
 import qualified Container as C
 import qualified Graphics.Gloss as G
 import Linear.V2
@@ -52,7 +53,8 @@ initialWorld =
             C.color = (0, 0, 0, 1)
           },
       hsv = (0, 0, 0),
-      timeSinceLastBall = 0
+      timeSinceLastBall = 0,
+      collisionsSolver = solveCollisionsNaively
     }
 
 renderBallWorld :: BallWorld -> G.Picture
