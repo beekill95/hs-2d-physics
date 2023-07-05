@@ -1,9 +1,12 @@
 module Main where
 
 -- import Control.DeepSeq
+
+-- import System.CPUTime
+
+import Control.DeepSeq
 import Graphics.Gloss.Interface.IO.Simulate
 import RandomAppLib
--- import System.CPUTime
 import System.TimeIt
 
 main :: IO ()
@@ -32,7 +35,10 @@ main = simulateIO window background fps initialWorld render update
       -- let balls = getBalls newWorld
       -- end <- balls `deepseq` getCPUTime
       -- let seconds = fromIntegral (end - start) * (10 ** (-12)) :: Float
-      (seconds, newWorld) <- timeItT $ updateBallWorld t w
+      (seconds, newWorld) <- timeItT $ do
+        x <- updateBallWorld t w
+        return $!! x
+
       putStrLn $
         show (nbBalls newWorld)
           ++ " balls took "

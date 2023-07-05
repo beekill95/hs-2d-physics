@@ -2,7 +2,8 @@ module Ball where
 
 import qualified Color
 import qualified Container as C
--- import Control.DeepSeq -- FIXME: Remove later, for performance measurement.
+import Control.DeepSeq
+import GHC.Generics (Generic)
 import qualified Graphics.Gloss as G
 import Linear (Metric (distance, signorm), V2 (V2))
 import Object
@@ -10,13 +11,16 @@ import Renderer
 import VerletObject
 
 data Ball = Ball
-  { center :: Vec2,
-    radius :: Float,
-    velocity :: Vec2,
-    acceleration :: Vec2,
-    color :: Color.RGBA,
-    previousCenter :: Maybe Vec2
+  { center :: !Vec2,
+    radius :: !Float,
+    velocity :: !Vec2,
+    acceleration :: !Vec2,
+    color :: !Color.RGBA,
+    previousCenter :: !(Maybe Vec2)
   }
+  deriving (Generic)
+
+instance NFData Ball
 
 -- FIXME: remove later
 -- instance NFData Ball where

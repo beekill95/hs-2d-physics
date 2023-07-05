@@ -3,21 +3,26 @@ module BallWorld where
 import Ball
 import qualified Color
 import Container
+import Control.DeepSeq
+import GHC.Generics (Generic)
 import Graphics.Gloss
 import Renderer
 import VerletObject
 import World
 
 data BallWorld = BallWorld
-  { balls :: [Ball],
-    container :: Container,
+  { balls :: ![Ball],
+    container :: !Container,
     -- Current color value that will be assigned to the next ball's color;
     -- it's only used for RandomAppLib.
-    hsv :: Color.HSV,
+    hsv :: !Color.HSV,
     -- Time since the last ball were added.
-    timeSinceLastBall :: Float,
+    timeSinceLastBall :: !Float,
     collisionsSolver :: [Ball] -> [Ball]
   }
+  deriving (Generic)
+
+instance NFData BallWorld
 
 instance World BallWorld where
   updateWorld t w = w {balls = update w}

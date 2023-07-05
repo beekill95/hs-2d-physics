@@ -26,6 +26,7 @@ initialWorld =
       hsv = (0, 0.7, 0.65),
       timeSinceLastBall = 0,
       collisionsSolver = solveCollisionsGriddedly (-500, 500) (-500, 500) 50
+      -- collisionsSolver = solveCollisionsNaively
     }
 
 -- For showing information about the world.

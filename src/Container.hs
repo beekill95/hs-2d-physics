@@ -1,6 +1,8 @@
 module Container where
 
 import qualified Color
+import Control.DeepSeq
+import GHC.Generics (Generic)
 import qualified Graphics.Gloss as G
 import Linear.V2
 import Object
@@ -13,6 +15,9 @@ data Container = Container
     radius :: Float,
     color :: Color.RGBA
   }
+  deriving (Generic)
+
+instance NFData Container
 
 instance Renderable Container where
   render

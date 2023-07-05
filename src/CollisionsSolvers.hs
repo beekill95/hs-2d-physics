@@ -1,30 +1,37 @@
 module CollisionsSolvers (solveCollisionsNaively, solveCollisionsGriddedly) where
 
+import Control.DeepSeq
 import Data.Foldable (foldl')
-import qualified Data.Map as M
+import qualified Data.Map.Strict as M
 import Linear.V2
 import Object
 
 -- Brute-force version of collisions solver.
-solveCollisionsNaively :: (RigidObject a) => [a] -> [a]
+solveCollisionsNaively :: (RigidObject a, NFData a) => [a] -> [a]
 solveCollisionsNaively [] = []
-solveCollisionsNaively (x : xs) = xNew `seq` xNew : solveCollisionsNaively xsNew
+solveCollisionsNaively (x : xs) = xNew `deepseq` xsNew `deepseq` xNew : solveCollisionsNaively xsNew
   where
-    solveCollisions y [] = (y, [])
-    solveCollisions y (h : rest) = y2 `seq` (y2, h1 : rest2)
+    solveCollisions !y [] = (y, [])
+    solveCollisions !y (h : rest) = y2 `seq` rest2 `deepseq` (y2, h1 : rest2)
       where
         (y1, h1) = solveCollision y h
-        (y2, rest2) = y1 `seq` solveCollisions y1 rest
+        (y2, rest2) = solveCollisions y1 rest
 
     (xNew, xsNew) = solveCollisions x xs
 
 -- Gridded version of collisions solver.
-solveCollisionsGriddedly :: (RigidObject a) => (Int, Int) -> (Int, Int) -> Int -> [a] -> [a]
+solveCollisionsGriddedly ::
+  (RigidObject a, NFData a) =>
+  (Int, Int) ->
+  (Int, Int) ->
+  Int ->
+  [a] ->
+  [a]
 solveCollisionsGriddedly _ _ _ [] = []
 solveCollisionsGriddedly w h s objs = solvedGrid `seq` (concat . cells) solvedGrid
   where
     solveCollisionsAndAccumulate ::
-      (RigidObject a) =>
+      (RigidObject a, NFData a) =>
       (Int, Int, Cell a) ->
       (Cell a, [(Int, Int, Cell a)]) ->
       (Cell a, [(Int, Int, Cell a)])
@@ -36,13 +43,13 @@ solveCollisionsGriddedly w h s objs = solvedGrid `seq` (concat . cells) solvedGr
         (cellSolved, neighborSolved) = solveCollisionsBetweenCells cell neighbor
 
     solveCollisionsForCell ::
-      (RigidObject a) =>
+      (RigidObject a, NFData a) =>
       (Int, Int) ->
       CollisionsGrid a ->
       CollisionsGrid a
-    solveCollisionsForCell (r, c) g = case getCell r c g of
+    solveCollisionsForCell (!r, !c) !g = case getCell r c g of
       Nothing -> g
-      Just cell -> updatedCells `seq` foldl' (flip updateCell) g updatedCells
+      Just cell -> updatedCells `deepseq` foldl' (flip updateCell) g updatedCells
         where
           neighboringCells = getNeighboringCells r c g
 
@@ -56,7 +63,7 @@ solveCollisionsGriddedly w h s objs = solvedGrid `seq` (concat . cells) solvedGr
           updatedCells = (r, c, cell2) : neighboringCells2
 
           -- Update these cells in the grid.
-          updateCell (rCell, cCell, newCell) gr = case cellIdx rCell cCell gr of
+          updateCell (!rCell, !cCell, !newCell) !gr = case cellIdx rCell cCell gr of
             Nothing -> gr
             Just cIdx -> grid {cells = M.insert cIdx newCell (cells gr)}
 
@@ -68,19 +75,23 @@ solveCollisionsGriddedly w h s objs = solvedGrid `seq` (concat . cells) solvedGr
 
 type Cell a = [a]
 
-solveCollisionsBetweenCells :: (RigidObject a) => Cell a -> Cell a -> (Cell a, Cell a)
+solveCollisionsBetweenCells ::
+  (RigidObject a, NFData a) =>
+  Cell a ->
+  Cell a ->
+  (Cell a, Cell a)
 solveCollisionsBetweenCells x y = splitAt xLength $ solveCollisionsNaively (x ++ y)
   where
     xLength = length x
 
 -- Utilities to work with grid.
 data CollisionsGrid a = CollisionsGrid
-  { cells :: M.Map Int (Cell a),
+  { cells :: !(M.Map Int (Cell a)),
     -- width :: Int,
     -- height :: Int,
     -- cellSize :: Int,
-    rowRange :: (Int, Int),
-    colRange :: (Int, Int)
+    rowRange :: !(Int, Int),
+    colRange :: !(Int, Int)
   }
 
 columns :: (RigidObject a) => CollisionsGrid a -> Int
@@ -88,7 +99,13 @@ columns g = cMax - cMin
   where
     (cMin, cMax) = colRange g
 
-constructCollisionsGrid :: (RigidObject a) => (Int, Int) -> (Int, Int) -> Int -> [a] -> CollisionsGrid a
+constructCollisionsGrid ::
+  (RigidObject a, NFData a) =>
+  (Int, Int) ->
+  (Int, Int) ->
+  Int ->
+  [a] ->
+  CollisionsGrid a
 constructCollisionsGrid (wMin, wMax) (hMin, hMax) s objs =
   CollisionsGrid
     { cells = foldl' (flip (insert . (\o -> (posToCellIdx o, [o])))) M.empty objs,
@@ -117,10 +134,20 @@ constructCollisionsGrid (wMin, wMax) (hMin, hMax) s objs =
         r = floor (x / sFloat)
         c = floor (y / sFloat)
 
-getCell :: (RigidObject a) => Int -> Int -> CollisionsGrid a -> Maybe (Cell a)
+getCell ::
+  (RigidObject a, NFData a) =>
+  Int ->
+  Int ->
+  CollisionsGrid a ->
+  Maybe (Cell a)
 getCell r c g = cellIdx r c g >>= (cells g M.!?)
 
-getNeighboringCells :: (RigidObject a) => Int -> Int -> CollisionsGrid a -> [(Int, Int, Cell a)]
+getNeighboringCells ::
+  (RigidObject a, NFData a) =>
+  Int ->
+  Int ->
+  CollisionsGrid a ->
+  [(Int, Int, Cell a)]
 getNeighboringCells r c g = foldl' (flip gatherNeighbors) [] neighboringIndices
   where
     neighboringIndices =
@@ -138,7 +165,12 @@ getNeighboringCells r c g = foldl' (flip gatherNeighbors) [] neighboringIndices
       Just x -> (rCell, cCell, x) : acc
       Nothing -> acc
 
-cellIdx :: (RigidObject a) => Int -> Int -> CollisionsGrid a -> Maybe Int
+cellIdx ::
+  (RigidObject a, NFData a) =>
+  Int ->
+  Int ->
+  CollisionsGrid a ->
+  Maybe Int
 cellIdx r c g
   | rMin <= r && r < rMax && cMin <= c && c < cMax = Just $ r * nbCols + c
   | otherwise = Nothing
